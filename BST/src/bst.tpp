@@ -383,7 +383,7 @@ void BST<T>::load(const std::string& fileName) {
     std::string data;
     std::getline(file, data);
     std::stringstream ss(data);
-    int num;
+    T num;
     Node* root = nullptr;
     Node* tmp2 = nullptr;
     while (ss >> num) {

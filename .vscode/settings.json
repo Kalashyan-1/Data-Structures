@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "*.tpp": "cpp",
+        "stdexcept": "cpp",
+        "*.tcc": "cpp"
+    }
+}
