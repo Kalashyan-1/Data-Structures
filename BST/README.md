@@ -5,6 +5,7 @@ This is a Binary search tree with the following functions implemented both recur
 4. height - this function returns the maximum height of bst;
 5. save - save BST data in file.
 6. load - read BST from file.
+
 And it has the following traversals.
 1. Inoroder
 2. Postorder
