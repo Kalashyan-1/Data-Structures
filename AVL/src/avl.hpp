@@ -5,7 +5,6 @@
 #include <queue>
 #include <stack>
 
-
 template <typename T>
 class AVL {
 private:
@@ -19,11 +18,10 @@ private:
     };
     
     Node* root = nullptr;
-private:
-    int getheight(Node*);
-    typename AVL<T>::Node* leftRotate(Node*);
-    typename AVL<T>::Node* rightRotate(Node*);
-    void balanceTree(T val, std::stack<Node*>& st);
+    
+public:
+    AVL() = default;
+    ~AVL() noexcept;
 public:
     void insert(T val);
     void remove(T val);
@@ -32,7 +30,14 @@ public:
     void inorder();
     void postorder();
     void preorder();
-    void levelOrder();};
+    void levelOrder();
+private:
+    int getheight(Node*);
+    typename AVL<T>::Node* leftRotate(Node*);
+    typename AVL<T>::Node* rightRotate(Node*);
+    void balanceTree(T val, std::stack<Node*>& st);
+    void deleteTree(Node*);
+};
 
 #include "avl.tpp"
 

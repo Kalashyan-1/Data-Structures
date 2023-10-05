@@ -29,6 +29,9 @@ private:
     };
     Node* root;
 public:
+    BST() = default;
+    ~BST() noexcept;
+public:
    void insert(T value);
    void remove(T value);
    bool find(T value);
@@ -37,8 +40,14 @@ public:
    void postorder();
    void preorder();
    void levelorder();
-   void save(const std::string& fileNmae);
-   void load(const std::string& fileNmae);
+   void printPredAndSucc(T);
+
+private:
+   void deleteTree(Node*);
+   Node* getMax(Node*);
+   Node* getMin(Node*);
+   Node* predecessor(Node*);
+   Node* successor(Node*);
 };
 
 #include "bst.tpp"

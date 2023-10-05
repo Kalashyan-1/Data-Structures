@@ -1,6 +1,26 @@
 #include "avl.hpp"
 
 template <typename T>
+AVL<T>::~AVL() noexcept {
+    try {
+        deleteTree(root);
+    }
+    catch(const std::exception& e) {
+        std::cerr << e.what() << '\n';
+    }
+    
+}
+
+
+template <typename T>
+void AVL<T>::deleteTree(Node* node) {
+    if (!node) return;
+    deleteTree(node->left);
+    deleteTree(node->right);
+    delete node;
+}
+
+template <typename T>
 void AVL<T>::insert(T val) {
     if (!root) {
         root = new Node(val);

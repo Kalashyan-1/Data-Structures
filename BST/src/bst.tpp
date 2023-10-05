@@ -1,6 +1,27 @@
 #include "bst.hpp"
 
 template <typename T>
+BST<T>::~BST() noexcept {
+    try {
+        deleteTree(root);
+    }
+    catch(const std::exception& e) {
+        std::cerr << e.what() << '\n';
+    }
+    
+}
+
+
+template <typename T>
+void BST<T>::deleteTree(Node* node) {
+    if (!node) return;
+    deleteTree(node->left);
+    deleteTree(node->right);
+    delete node;
+}
+
+
+template <typename T>
 void BST<T>::insert(T val) {
     if (!root) {
         root = new Node(val);
@@ -120,7 +141,7 @@ void BST<T>::remove(T val) {
     }
 }
 
-//Rcursive deleteion
+//Rcursive deletion
 // template <typename T>
 // TreeNode<T>* remove(TreeNode<T>* root, T val) {
 //     if (!root) {return root;}
@@ -138,7 +159,7 @@ void BST<T>::remove(T val) {
 //             delete root;
 //             root = tmp;
 //         } 
-//         TreeNode<T>* min = root;
+//         TreeNode<T>* min = root->right;
 //         while (min->left) {
 //             min = min->left;
 //         }
@@ -315,7 +336,7 @@ void BST<T>::preorder() {
 
 //Recursive Preorder traversal
 // template <typename T>
-// void inorder(TreeNode<T>* root) {
+// void preorder(TreeNode<T>* root) {
 //     if (!root) {return;}
 //     std::cout << root->data;
 //     inorder(root->left);
@@ -341,55 +362,67 @@ void BST<T>::levelorder() {
     }
 }
 
-
+template <typename T>
+typename BST<T>::Node* BST<T>::getMax(Node* node) {
+    while (node->right) {
+        node = node->right;
+    }
+    return node;
+}
 
 template <typename T>
-void BST<T>::save(const std::string& fileName) {
-    if(!root) {return;}
-    std::ofstream file(fileName);
-    std::string type =  typeid(T).name();
-    file << type;
-    file << std::endl;
-    Node* tmp = nullptr;
-    std::string res = "";
-    std::queue<Node*> qu;
-    qu.push(root);
-    while (!qu.empty()) {
-        tmp = qu.front();
-        qu.pop();
-        res += std::to_string(tmp->data) + ',';
-        if (tmp->left) {
-            qu.push(tmp->left);
-        }
-        if (tmp->right) {
-            qu.push(tmp->right);
-        }
+typename BST<T>::Node* BST<T>::getMin(Node* node) {
+    while (node->left) {
+        node = node->left;
     }
-    file << res;
+    return node;
 }
 
-
-template <typename T> 
-void BST<T>::load(const std::string& fileName) {
-    std::ifstream file(fileName);
-    if (!file.is_open()) {
-        throw std::invalid_argument("Given file name is invalid");
-    }
-    std::string type;
-    std::getline(file, type);
-    if (type != typeid(T).name()) {
-        throw std::invalid_argument("Given file data has incompatible type");
-    }
-    std::string data;
-    std::getline(file, data);
-    std::stringstream ss(data);
-    T num;
-    Node* root = nullptr;
-    Node* tmp2 = nullptr;
-    while (ss >> num) {
-        if (ss.peek() == ',') {
-            ss.ignore();
+template <typename T>
+typename BST<T>::Node* BST<T>::predecessor(Node* node) {
+    if (!node) return nullptr;
+    if (node->left) {return getMax(node->left);}
+    Node* pred = nullptr;
+    Node* current = root;
+    while (current != node) {
+        if (current->data > node->data) {
+            current = current->left;
+        } else {
+            pred = current;
+            current = current->right;
         }
-        insert(num);
     }
+    return pred;
 }
+
+template <typename T>
+typename BST<T>::Node* BST<T>::successor(Node* node) {
+    if (!node) return nullptr;
+    if (node->right) {return getMin(node->right);}
+    Node* succ = nullptr;
+    Node* current = root;
+    while (current != node) {
+        if (current->data < node->data) {
+            current = current->right;
+        } else {
+            succ = current;
+            current = current->left;
+        }
+    }
+    return succ;
+}
+
+template <typename T>
+void BST<T>::printPredAndSucc(T val) {
+    Node* tmp = root;
+    while (tmp && tmp->data != val) {
+        if (tmp->data > val) {
+            tmp = tmp->left;
+        } else {
+            tmp = tmp->right;
+        }
+    }
+    std::cout << predecessor(tmp)->data << std::endl;
+    std::cout << successor(tmp)->data << std::endl;
+}
+
